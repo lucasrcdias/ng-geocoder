@@ -1,0 +1,28 @@
+{
+  "name": "ng-geocoder",
+  "description": "Angular Google Maps Geocoder",
+  "main": [
+    "dist/ng-geocoder.js"
+  ],
+  "authors": [
+    "Lucas Ramos <lucasrcdias@gmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "JS",
+    "AngularJS",
+    "Maps",
+    "Geocoder"
+  ],
+  "homepage": "https://github.com/lucasrcdias/ng-geocoder",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angucomplete-alt": "^2.5.0"
+  }
+}

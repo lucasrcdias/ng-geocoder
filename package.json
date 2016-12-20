@@ -1,0 +1,27 @@
+{
+  "name": "ng-geocoder",
+  "version": "0.0.1",
+  "description": "",
+  "main": "ng-geocoder.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucasrcdias/ng-geocoder.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lucasrcdias/ng-geocoder/issues"
+  },
+  "homepage": "https://github.com/lucasrcdias/ng-geocoder#readme",
+  "devDependencies": {
+    "browser-sync": "^2.15.0",
+    "gulp": "^3.9.1",
+    "gulp-angular-embed-templates": "^2.3.0",
+    "gulp-angular-filesort": "^1.1.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-if": "^2.0.2",
+    "gulp-plumber": "^1.1.0",
+    "gulp-uglify": "^2.0.0",
+    "gulp-watch": "^4.3.9"
+  }
+}
