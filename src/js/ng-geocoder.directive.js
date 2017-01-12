@@ -9,6 +9,7 @@
     var directive = {
       "restrict": "AE",
       "scope": {
+        "result": "=ngGeocoder",
         "id": "=",
         "wait": "=",
         "minLength": "=",
@@ -27,13 +28,53 @@
 
     function ngGeocoderCtrl () {
       var vm = this;
+
+      vm.index   = 0;
+      vm.results = [];
+
+      vm.select        = select;
+      vm.displayList   = displayList;
+      vm.inputKeypress = inputKeypress;
+
+      function select (index) {
+        vm.result = vm.results[index];
+      }
+
+      function inputKeypress ($event) {
+        if (event.keyCode === 38 || event.keyCode === 40) return handleArrowKeys($event.keyCode);
+        if (event.keyCode === 13)                         return select(vm.index);
+      }
+
+      function handleArrowKeys(key) {
+        var index         = vm.index;
+        var resultsLength = vm.results.length;
+
+        var arrowUp   = key === 38;
+        var arrowDown = key === 40;
+
+        if (arrowUp) {
+          index = index > 0 ? index - 1 : resultsLength;
+        }
+
+        if (arrowDown) {
+          index = index < resultsLength ? index + 1 : 0;
+        }
+
+        vm.index = index;
+      }
+
+      function displayList () {
+        return vm.inputFocused || vm.results.length;
+      }
     }
 
     function linkFunction (scope, element, attributes) {
       var waitTimeout;
-      var input = element[0].querySelector("input");
 
-      input.addEventListener("input", inputChanged);
+      var $el   = element[0];
+      var input = $el.querySelector(".ng-geocoder__input");
+
+      input.addEventListener("input",    inputChanged);
 
       function inputChanged (event) {
         var length = input.value.length;

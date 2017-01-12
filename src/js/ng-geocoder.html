@@ -1,8 +1,8 @@
 <div class="ng-geocoder">
-  <input id="{{ vm.id }}" placeholder="{{ vm.placeholder }}" class="ng-geocoder__input" type="text" ng-class="vm.inputClass" ng-keypress="vm.inputKeypress()"/>
+  <input id="{{ vm.id }}" placeholder="{{ vm.placeholder }}" class="ng-geocoder__input" type="text" ng-class="vm.inputClass" ng-keypress="vm.inputKeypress()" ng-blur="vm.inputFocused = false" ng-focus="vm.inputFocused = true"/>
 
-  <ul class="ng-geocoder__list" ng-show="vm.inputFocused || vm.results.length">
-    <li class="ng-geocoder__list__item" ng-repeat="result in vm.results" ng-class="{ 'ng-geocoder__list__item--focus': vm.index === $index }" ng-click="vm.select($index)">
+  <ul class="ng-geocoder__list" ng-show="vm.displayList()">
+    <li class="ng-geocoder__list__item" ng-repeat="result in vm.results track by formatted_address" ng-class="{ 'ng-geocoder__list__item--focus': vm.index === $index }" ng-click="vm.select($index)">
       <strong class="ng-geocoder__list__item__text" ng-bind="result.formatted_address" tabindex="{{ $index }}"></strong>
     </li>
     <li class="ng-geocoder__list__item ng-geocoder__list__item--searching" ng-show="vm.isSearching">
