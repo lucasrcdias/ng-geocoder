@@ -1,0 +1,17 @@
+<div>
+  <input type="text" class="{{ vm.inputClass }}" id="{{ vm.id }}" placeholder="{{ vm.placeholder }}" />
+
+  <ul>
+    <li ng-repeat="result in vm.results">
+      <strong ng-bind="result.formatted_address" tabindex="{{ $index }}"></strong>
+    </li>
+    <li ng-show="vm.isSearching">
+      <strong ng-bind="vm.textSearching"></strong>
+    </li>
+    <li ng-show="vm.isEmpty">
+      <strong ng-bind="vm.textNoResults"></strong>
+    </li>
+  </ul>
+</div>
+
+<!-- pause='{{ vm.pause }}' min-length='vm.minLength' input-class='{{ vm.inputClass }}' -->
