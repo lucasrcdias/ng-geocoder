@@ -5,7 +5,7 @@ var concat          = require("gulp-concat");
 var uglify          = require("gulp-uglify");
 var plumber         = require("gulp-plumber");
 var browserSync     = require("browser-sync");
-var embedTemplates  = require("gulp-angular-embed-templates");
+var includeFile     = require("gulp-include-file");
 var angularFileSort = require("gulp-angular-filesort");
 
 var paths = {
@@ -20,9 +20,7 @@ function proccessJsTo (location) {
     .pipe(plumber())
     .pipe(angularFileSort())
     .pipe(concat("ng-geocoder.js"))
-    .pipe(embedTemplates({
-      "skipErrors": true
-    }))
+    .pipe(includeFile())
     .pipe(gulpif(location === "dist", uglify()))
     .pipe(gulp.dest(paths[location]));
 }
