@@ -13,6 +13,7 @@
         "id": "=",
         "wait": "=",
         "minLength": "=",
+        "inputClass": "@",
         "placeholder": "@",
         "textSearching": "@",
         "textNoResults": "@"
@@ -29,20 +30,32 @@
     function ngGeocoderCtrl () {
       var vm = this;
 
-      vm.index   = 0;
-      vm.results = [];
+      vm.index    = 0;
+      vm.results  = [];
+      vm.showList = false;
 
-      vm.select        = select;
-      vm.displayList   = displayList;
-      vm.inputKeypress = inputKeypress;
+      vm.select       = select;
+      vm.displayList  = displayList;
+      vm.inputKeydown = inputKeydown;
 
       function select (index) {
-        vm.result = vm.results[index];
+        vm.result   = vm.results[index];
+        vm.showList = false;
       }
 
-      function inputKeypress ($event) {
-        if (event.keyCode === 38 || event.keyCode === 40) return handleArrowKeys($event.keyCode);
-        if (event.keyCode === 13)                         return select(vm.index);
+      function inputKeydown ($event) {
+        if (!$event || !$event.keyCode) return;
+
+        var enterPressed  = $event.keyCode === 13;
+        var arrowsPressed = $event.keyCode === 38 || $event.keyCode === 40;
+
+        if (enterPressed || arrowsPressed) {
+          if (arrowsPressed) handleArrowKeys($event.keyCode);
+          if (enterPressed)  select(vm.index);
+
+          $event.preventDefault();
+          $event.stopPropagation();
+        }
       }
 
       function handleArrowKeys(key) {
@@ -53,18 +66,21 @@
         var arrowDown = key === 40;
 
         if (arrowUp) {
-          index = index > 0 ? index - 1 : resultsLength;
+          index--;
         }
 
         if (arrowDown) {
-          index = index < resultsLength ? index + 1 : 0;
+          index++;
         }
+
+        if (index >= resultsLength) { index = 0; }
+        if (index < 0) { index = resultsLength - 1; }
 
         vm.index = index;
       }
 
       function displayList () {
-        return vm.inputFocused || vm.results.length;
+        return (vm.inputFocused || vm.results.length) && vm.showList;
       }
     }
 
@@ -74,7 +90,7 @@
       var $el   = element[0];
       var input = $el.querySelector(".ng-geocoder__input");
 
-      input.addEventListener("input",    inputChanged);
+      input.addEventListener("input", inputChanged);
 
       function inputChanged (event) {
         var length = input.value.length;
@@ -87,6 +103,7 @@
       }
 
       function search (query) {
+        scope.vm.results     = [];
         scope.vm.isSearching = true;
 
         return ngGeocoderService.geocodeByQuery(query || input.value)
@@ -96,6 +113,7 @@
       function geocodeSuccess (results) {
         scope.vm.isSearching = false;
         scope.vm.results     = results || [];
+        scope.vm.showList    = true;
       }
     }
   }
