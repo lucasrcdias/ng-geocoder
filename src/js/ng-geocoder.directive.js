@@ -110,18 +110,18 @@
       function inputChanged (event) {
         var length = scope.vm.query.length;
 
-        if (length <= scope.vm.minLength || scope.vm.isSearching) { return; }
+        if (length < scope.vm.minLength || scope.vm.isSearching) { return; }
 
         if (waitTimeout) { $timeout.cancel(waitTimeout); }
 
         waitTimeout = $timeout(search, scope.vm.wait || 500);
       }
 
-      function search (query) {
+      function search () {
         scope.vm.results     = [];
         scope.vm.isSearching = true;
 
-        return ngGeocoderService.geocodeByQuery(query || scope.vm.query)
+        return ngGeocoderService.geocodeByQuery(scope.vm.query)
           .then(geocodeSuccess);
       }
 
