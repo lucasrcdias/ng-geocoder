@@ -45,6 +45,8 @@
 
       function select (index) {
         vm.result   = vm.results[index];
+        vm.query    = vm.result.formatted_address;
+
         vm.showList = false;
       }
 
@@ -98,8 +100,15 @@
       input.addEventListener("input",          inputChanged);
       input.addEventListener("compositionend", inputChanged);
 
+      var placeId = attributes.placeId;
+
+      if (placeId) {
+        ngGeocoderService.geocodeById(placeId)
+          .then(geocodedWithPlaceId);
+      }
+
       function inputChanged (event) {
-        var length = input.value.length;
+        var length = scope.vm.query.length;
 
         if (length <= scope.vm.minLength || scope.vm.isSearching) { return; }
 
@@ -112,7 +121,7 @@
         scope.vm.results     = [];
         scope.vm.isSearching = true;
 
-        return ngGeocoderService.geocodeByQuery(query || input.value)
+        return ngGeocoderService.geocodeByQuery(query || scope.vm.query)
           .then(geocodeSuccess);
       }
 
@@ -120,6 +129,17 @@
         scope.vm.isSearching = false;
         scope.vm.results     = results || [];
         scope.vm.showList    = true;
+      }
+
+      function geocodedWithPlaceId (results) {
+        var result = results[0];
+
+        if (result) {
+          scope.vm.query    = result.formatted_address;
+          scope.vm.result   = result;
+
+          scope.vm.showList = false;
+        }
       }
     }
 
