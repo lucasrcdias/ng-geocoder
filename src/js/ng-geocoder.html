@@ -1,5 +1,5 @@
 <div class="ng-geocoder">
-  <input id="{{ vm.id }}" placeholder="{{ vm.placeholder }}" class="ng-geocoder__input" type="text" ng-class="vm.inputClass" ng-keydown="vm.inputKeydown($event)" ng-blur="vm.inputFocused = false; vm.showList = false" ng-focus="vm.inputFocused = true; vm.showList = true" autocomplete="off"/>
+  <input id="{{ vm.id }}" placeholder="{{ vm.placeholder }}" class="ng-geocoder__input" type="text" ng-model="vm.query" ng-class="vm.inputClass" ng-keydown="vm.inputKeydown($event)" ng-blur="vm.inputFocused = false; vm.showList = false" ng-focus="vm.inputFocused = true; vm.showList = true" autocomplete="off"/>
 
   <ul class="ng-geocoder__list" ng-show="vm.displayList()" ng-style="{ 'max-height': vm.maxHeight || '250px' }">
     <li class="ng-geocoder__list__item" ng-repeat="result in vm.results" ng-class="{ 'ng-geocoder__list__item--focus': vm.index === $index }" ng-click="vm.select($index)">
