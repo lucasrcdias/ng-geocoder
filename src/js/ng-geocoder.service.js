@@ -28,8 +28,8 @@
       return defer.reject("Unknown error");
     }
 
-    function geocodeById (place_id) {
-      return geocode({ "place_id": query });
+    function geocodeById (placeId) {
+      return geocode({ "placeId": placeId });
     }
 
     function geocodeByQuery (query) {
