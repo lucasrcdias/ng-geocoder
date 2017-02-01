@@ -33,7 +33,8 @@
     return directive;
 
     function ngGeocoderCtrl () {
-      var vm = this;
+      var vm       = this;
+      var dropdown = document.querySelector(".ng-geocoder__list");
 
       vm.index    = 0;
       vm.results  = [];
@@ -72,22 +73,61 @@
         var arrowUp   = key === 38;
         var arrowDown = key === 40;
 
-        if (arrowUp) {
+        if (arrowUp && (index - 1 >= 0)) {
           index--;
         }
 
-        if (arrowDown) {
+        if (arrowDown && (index + 1 < resultsLength)) {
           index++;
         }
 
-        if (index >= resultsLength) { index = 0; }
-        if (index < 0) { index = resultsLength - 1; }
-
         vm.index = index;
+
+        if (arrowUp   && vm.results.length) fixArrowUpScroll();
+        if (arrowDown && vm.results.length) fixArrowDownScroll();
       }
 
       function displayList () {
         return (vm.inputFocused || vm.results.length) && vm.showList;
+      }
+
+      function fixArrowUpScroll() {
+        var rowTop = dropdownRowTop();
+        var height = dropdownRowOffsetHeight(getCurrentRow());
+
+        if (rowTop < height) {
+          dropdownScrollTo(rowTop - height);
+        }
+      }
+
+      function fixArrowDownScroll () {
+        var row = getCurrentRow();
+
+        if (getDropdownHeight() < row.getBoundingClientRect().bottom) {
+          dropdownScrollTo(dropdownRowOffsetHeight(row));
+        }
+      }
+
+      function getCurrentRow () {
+        return document.querySelector(".ng-geocoder__list__item--focus");
+      }
+
+      function dropdownRowTop () {
+        return getCurrentRow().getBoundingClientRect().top - (dropdown.getBoundingClientRect().top + parseInt(getComputedStyle(dropdown).paddingTop, 10));
+      }
+
+      function dropdownScrollTo (offset) {
+        dropdown.scrollTop = dropdown.scrollTop + offset;
+      }
+
+      function getDropdownHeight () {
+        return dropdown.getBoundingClientRect().top + parseInt(getComputedStyle(dropdown).maxHeight, 10);
+      }
+
+      function dropdownRowOffsetHeight (row) {
+        var css = getComputedStyle(row);
+
+        return row.offsetHeight + parseInt(css.marginTop, 10) + parseInt(css.marginBottom, 10);
       }
     }
 
@@ -121,7 +161,7 @@
         scope.vm.results     = [];
         scope.vm.isSearching = true;
 
-        return ngGeocoderService.geocodeByQuery(scope.vm.query)
+        return ngGeocoderService.geocodeByQuery(scope.vm.query, attributes.region)
           .then(geocodeSuccess);
       }
 
