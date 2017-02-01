@@ -32,8 +32,8 @@
       return geocode({ "placeId": placeId });
     }
 
-    function geocodeByQuery (query) {
-      return geocode({ "address": query });
+    function geocodeByQuery (query, region) {
+      return geocode({ "address": query, "region": region });
     }
 
     function geocode (options) {
