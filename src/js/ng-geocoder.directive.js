@@ -16,7 +16,8 @@
         "inputClass": "@",
         "placeholder": "@",
         "textSearching": "@",
-        "textNoResults": "@"
+        "textNoResults": "@",
+        "maxHeight": "@"
       },
       "controller": ngGeocoderCtrl,
       "controllerAs": "vm",
