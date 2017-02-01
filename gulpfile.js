@@ -96,5 +96,6 @@ gulp.task('browser', function () {
   });
 });
 
-gulp.task("dev",   ["jsDev", "styleDev", "watch", "browser"]);
-gulp.task("build", ["jsDist", "styleDist"]);
+gulp.task("dev",     ["jsDev", "styleDev", "watch", "browser"]);
+gulp.task("build",   ["jsDist", "styleDist"]);
+gulp.task("default", ["dev"]);
