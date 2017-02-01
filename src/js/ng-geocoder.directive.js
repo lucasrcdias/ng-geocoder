@@ -3,9 +3,13 @@
     .module("ng-geocoder")
     .directive("ngGeocoder", ngGeocoder);
 
-  ngGeocoder.$inject = ["$timeout", "ngGeocoderService"];
+  ngGeocoder.$inject = ["$timeout", "$templateCache", "ngGeocoderService"];
 
-  function ngGeocoder ($timeout, ngGeocoderService) {
+  function ngGeocoder ($timeout, $templateCache, ngGeocoderService) {
+    var DEFAULT_TEMPLATE_URL = "/ng-geocoder/ng-geocoder.html";
+
+    $templateCache.put(DEFAULT_TEMPLATE_URL, INCLUDE_FILE("ng-geocoder.html"));
+
     var directive = {
       "restrict": "AE",
       "scope": {
@@ -23,7 +27,7 @@
       "controllerAs": "vm",
       "bindToController": true,
       "link": linkFunction,
-      "template": INCLUDE_FILE("ng-geocoder.html")
+      "templateUrl": geocoderTemplate
     };
 
     return directive;
@@ -91,7 +95,8 @@
       var $el   = element[0];
       var input = $el.querySelector(".ng-geocoder__input");
 
-      input.addEventListener("input", inputChanged);
+      input.addEventListener("input",          inputChanged);
+      input.addEventListener("compositionend", inputChanged);
 
       function inputChanged (event) {
         var length = input.value.length;
@@ -116,6 +121,10 @@
         scope.vm.results     = results || [];
         scope.vm.showList    = true;
       }
+    }
+
+    function geocoderTemplate (element, attributes) {
+      return attributes.templateUrl || DEFAULT_TEMPLATE_URL
     }
   }
 })();
