@@ -1,15 +1,15 @@
 <div class="ng-geocoder">
-  <input id="{{ vm.inputId }}" placeholder="{{ vm.placeholder }}" class="ng-geocoder__input" type="text" ng-model="vm.query" ng-class="vm.inputClass" ng-keydown="vm.inputKeydown($event)" ng-blur="vm.showList = false" ng-focus="vm.showList = true" autocomplete="off"/>
+  <input id="{{ inputId }}" placeholder="{{ placeholder }}" class="ng-geocoder__input" type="text" ng-model="query" ng-class="inputClass" autocomplete="off"/>
 
-  <ul class="ng-geocoder__list" ng-show="vm.displayList()" ng-style="{ 'max-height': vm.maxHeight || '250px' }">
-    <li class="ng-geocoder__list__item" ng-repeat="result in vm.results" ng-class="{ 'ng-geocoder__list__item--focus': vm.index === $index }" ng-click="vm.select($index)">
+  <ul class="ng-geocoder__list" ng-show="displayList()" ng-style="{ 'max-height': maxHeight || '250px' }">
+    <li class="ng-geocoder__list__item ng-geocoder__list__item--searching" ng-if="isSearching">
+      <strong class="ng-geocoder__list__item__text" ng-bind="textSearching"></strong>
+    </li>
+    <li class="ng-geocoder__list__item ng-geocoder__list__item--empty" ng-if="isEmpty">
+      <strong class="ng-geocoder__list__item__text" ng-bind="textNoResults"></strong>
+    </li>
+    <li class="ng-geocoder__list__item" ng-repeat="result in results" ng-class="{ 'ng-geocoder__list__item--focus': index === $index }" ng-click="selectItem($index)">
       <strong class="ng-geocoder__list__item__text" ng-bind="result.formatted_address" tabindex="{{ $index }}"></strong>
-    </li>
-    <li class="ng-geocoder__list__item ng-geocoder__list__item--searching" ng-if="vm.isSearching">
-      <strong class="ng-geocoder__list__item__text" ng-bind="vm.textSearching"></strong>
-    </li>
-    <li class="ng-geocoder__list__item ng-geocoder__list__item--empty" ng-if="vm.isEmpty">
-      <strong class="ng-geocoder__list__item__text" ng-bind="vm.textNoResults"></strong>
     </li>
   </ul>
 </div>

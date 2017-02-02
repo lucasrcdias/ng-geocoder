@@ -23,56 +23,112 @@
         "textNoResults": "@",
         "maxHeight": "@"
       },
-      "controller": ngGeocoderCtrl,
-      "controllerAs": "vm",
-      "bindToController": true,
       "link": linkFunction,
       "templateUrl": geocoderTemplate
     };
 
     return directive;
 
-    function ngGeocoderCtrl () {
-      var vm       = this;
-      var dropdown = document.querySelector(".ng-geocoder__list");
+    function linkFunction (scope, element, attributes) {
+      var waitTimeout;
 
-      vm.index    = 0;
-      vm.results  = [];
-      vm.showList = false;
+      var $el      = element[0];
+      var input    = $el.querySelector(".ng-geocoder__input");
+      var dropdown = $el.querySelector(".ng-geocoder__list");
+      var placeId  = attributes.placeId;
 
-      vm.selectItem   = selectItem;
-      vm.displayList  = displayList;
-      vm.inputKeydown = inputKeydown;
+      scope.index   = 0;
+      scope.results = [];
 
-      function selectItem (index) {
-        vm.result   = vm.results[index];
-        vm.query    = vm.result.formatted_address;
+      scope.selectItem   = selectItem;
+      scope.displayList  = displayList;
+      scope.inputKeydown = inputKeydown;
 
-        vm.showList = false;
+      input.addEventListener("blur",           inputBlur);
+      input.addEventListener("focus",          inputFocus);
+      input.addEventListener("input",          inputChanged);
+      input.addEventListener("keydown",        inputKeydown);
+      input.addEventListener("compositionend", inputChanged);
+
+      if (placeId) {
+        ngGeocoderService.geocodeById(placeId)
+          .then(geocodedWithPlaceId);
       }
 
-      function displayList () {
-        return vm.results.length && vm.showList;
+      function inputBlur (event) {
+        scope.showList = false;
       }
 
-      function inputKeydown ($event) {
-        if (!$event || !$event.keyCode) return;
+      function inputFocus (event) {
+        scope.showList = true;
+      }
 
-        var enterPressed  = $event.keyCode === 13;
-        var arrowsPressed = $event.keyCode === 38 || $event.keyCode === 40;
+      function inputChanged (event) {
+        var length = scope.query.length;
+
+        if (length < scope.minLength || scope.isSearching) { return; }
+
+        if (waitTimeout) { $timeout.cancel(waitTimeout); }
+
+        waitTimeout = $timeout(search, scope.wait || 500);
+      }
+
+      function inputKeydown (event) {
+        if (!event || !event.keyCode) return;
+
+        var enterPressed  = event.keyCode === 13;
+        var arrowsPressed = event.keyCode === 38 || event.keyCode === 40;
 
         if (enterPressed || arrowsPressed) {
-          if (arrowsPressed) handleArrowKeys($event.keyCode);
-          if (enterPressed)  selectItem(vm.index);
+          if (arrowsPressed) handleArrowKeys(event.keyCode);
+          if (enterPressed)  selectItem(index);
 
-          $event.preventDefault();
-          $event.stopPropagation();
+          event.preventDefault();
+          event.stopPropagation();
+
+          return false;
         }
       }
 
+      function search () {
+        scope.results     = [];
+        scope.isSearching = true;
+
+        return ngGeocoderService.geocodeByQuery(scope.query, attributes.region)
+          .then(geocodeSuccess);
+      }
+
+      function geocodeSuccess (results) {
+        scope.isSearching = false;
+        scope.results     = results || [];
+        scope.showList    = true;
+      }
+
+      function geocodedWithPlaceId (results) {
+        var result = results[0];
+
+        if (result) {
+          scope.query    = result.formatted_address;
+          scope.result   = result;
+
+          scope.showList = false;
+        }
+      }
+
+      function selectItem (index) {
+        scope.result   = scope.results[index];
+        scope.query    = scope.result.formatted_address;
+
+        scope.showList = false;
+      }
+
+      function displayList () {
+        return scope.results.length && scope.showList;
+      }
+
       function handleArrowKeys(key) {
-        var index         = vm.index;
-        var resultsLength = vm.results.length;
+        var index         = scope.index;
+        var resultsLength = scope.results.length;
 
         var arrowUp   = key === 38;
         var arrowDown = key === 40;
@@ -85,10 +141,12 @@
           index++;
         }
 
-        vm.index = index;
+        scope.$apply(function () {
+          scope.index = index;
+        });
 
-        if (arrowUp   && vm.results.length) fixArrowUpScroll();
-        if (arrowDown && vm.results.length) fixArrowDownScroll();
+        if (arrowUp   && scope.results.length) fixArrowUpScroll();
+        if (arrowDown && scope.results.length) fixArrowDownScroll();
       }
 
       function fixArrowUpScroll() {
@@ -109,7 +167,7 @@
       }
 
       function getCurrentRow () {
-        return document.querySelector(".ng-geocoder__list__item--focus");
+        return $el.querySelector(".ng-geocoder__list__item--focus");
       }
 
       function dropdownRowTop () {
@@ -128,58 +186,6 @@
         var css = getComputedStyle(row);
 
         return row.offsetHeight + parseInt(css.marginTop, 10) + parseInt(css.marginBottom, 10);
-      }
-    }
-
-    function linkFunction (scope, element, attributes) {
-      var waitTimeout;
-
-      var $el   = element[0];
-      var input = $el.querySelector(".ng-geocoder__input");
-
-      input.addEventListener("input",          inputChanged);
-      input.addEventListener("compositionend", inputChanged);
-
-      var placeId = attributes.placeId;
-
-      if (placeId) {
-        ngGeocoderService.geocodeById(placeId)
-          .then(geocodedWithPlaceId);
-      }
-
-      function inputChanged (event) {
-        var length = scope.vm.query.length;
-
-        if (length < scope.vm.minLength || scope.vm.isSearching) { return; }
-
-        if (waitTimeout) { $timeout.cancel(waitTimeout); }
-
-        waitTimeout = $timeout(search, scope.vm.wait || 500);
-      }
-
-      function search () {
-        scope.vm.results     = [];
-        scope.vm.isSearching = true;
-
-        return ngGeocoderService.geocodeByQuery(scope.vm.query, attributes.region)
-          .then(geocodeSuccess);
-      }
-
-      function geocodeSuccess (results) {
-        scope.vm.isSearching = false;
-        scope.vm.results     = results || [];
-        scope.vm.showList    = true;
-      }
-
-      function geocodedWithPlaceId (results) {
-        var result = results[0];
-
-        if (result) {
-          scope.vm.query    = result.formatted_address;
-          scope.vm.result   = result;
-
-          scope.vm.showList = false;
-        }
       }
     }
 
