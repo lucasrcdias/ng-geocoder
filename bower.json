@@ -19,5 +19,8 @@
     "**/.*",
     "node_modules",
     "bower_components"
-  ]
+  ],
+  "devDependencies": {
+    "angular": "1.5.5"
+  }
 }
