@@ -18,11 +18,6 @@
   "ignore": [
     "**/.*",
     "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
-  "dependencies": {
-    "angucomplete-alt": "^2.5.0"
-  }
+    "bower_components"
+  ]
 }
