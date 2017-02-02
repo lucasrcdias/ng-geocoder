@@ -84,7 +84,10 @@ gulp.task('browser', function () {
   browserSync.init(paths.dev, {
     port: '9000',
     server: {
-      baseDir: paths.dev
+      baseDir: paths.dev,
+      routes: {
+        "/bower": "bower_components"
+      }
     },
     socket: {
       port: '9000',
