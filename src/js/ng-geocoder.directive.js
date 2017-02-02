@@ -14,7 +14,7 @@
       "restrict": "AE",
       "scope": {
         "result": "=ngGeocoder",
-        "id": "=",
+        "inputId": "=",
         "wait": "=",
         "minLength": "=",
         "inputClass": "@",
@@ -40,15 +40,19 @@
       vm.results  = [];
       vm.showList = false;
 
-      vm.select       = select;
+      vm.selectItem   = selectItem;
       vm.displayList  = displayList;
       vm.inputKeydown = inputKeydown;
 
-      function select (index) {
+      function selectItem (index) {
         vm.result   = vm.results[index];
         vm.query    = vm.result.formatted_address;
 
         vm.showList = false;
+      }
+
+      function displayList () {
+        return vm.results.length && vm.showList;
       }
 
       function inputKeydown ($event) {
@@ -59,7 +63,7 @@
 
         if (enterPressed || arrowsPressed) {
           if (arrowsPressed) handleArrowKeys($event.keyCode);
-          if (enterPressed)  select(vm.index);
+          if (enterPressed)  selectItem(vm.index);
 
           $event.preventDefault();
           $event.stopPropagation();
@@ -85,10 +89,6 @@
 
         if (arrowUp   && vm.results.length) fixArrowUpScroll();
         if (arrowDown && vm.results.length) fixArrowDownScroll();
-      }
-
-      function displayList () {
-        return (vm.inputFocused || vm.results.length) && vm.showList;
       }
 
       function fixArrowUpScroll() {
