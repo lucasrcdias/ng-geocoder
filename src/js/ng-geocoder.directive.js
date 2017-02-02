@@ -33,6 +33,7 @@
       var waitTimeout;
 
       var $el      = element[0];
+      var form     = $el.closest("form");
       var input    = $el.querySelector(".ng-geocoder__input");
       var dropdown = $el.querySelector(".ng-geocoder__list");
       var placeId  = attributes.placeId;
@@ -44,6 +45,8 @@
       scope.displayList  = displayList;
       scope.inputKeydown = inputKeydown;
 
+      form.addEventListener("keydown", formKeydown);
+
       input.addEventListener("blur",           inputBlur);
       input.addEventListener("focus",          inputFocus);
       input.addEventListener("input",          inputChanged);
@@ -53,6 +56,15 @@
       if (placeId) {
         ngGeocoderService.geocodeById(placeId)
           .then(geocodedWithPlaceId);
+      }
+
+      function formKeydown (event) {
+        var targetIsGeocoderInput = event.target.classList.contains("ng-geocoder__input");
+
+        if (event.keyCode === 13 && targetIsGeocoderInput) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
       }
 
       function inputBlur (event) {
@@ -81,7 +93,7 @@
 
         if (enterPressed || arrowsPressed) {
           if (arrowsPressed) handleArrowKeys(event.keyCode);
-          if (enterPressed)  selectItem(index);
+          if (enterPressed)  selectItem(scope.index);
 
           event.preventDefault();
           event.stopPropagation();
@@ -102,6 +114,7 @@
         scope.isSearching = false;
         scope.results     = results || [];
         scope.showList    = true;
+        scope.index       = 0;
       }
 
       function geocodedWithPlaceId (results) {
@@ -120,6 +133,8 @@
         scope.query    = scope.result.formatted_address;
 
         scope.showList = false;
+
+        scope.$apply();
       }
 
       function displayList () {
