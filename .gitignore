@@ -1,0 +1,4 @@
+node_modules/
+dev/
+bower_components/
+.DS_Store
