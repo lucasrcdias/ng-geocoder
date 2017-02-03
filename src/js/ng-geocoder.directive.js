@@ -23,13 +23,13 @@
         "textNoResults": "@",
         "maxHeight": "@"
       },
-      "link": linkFunction,
+      "link": link,
       "templateUrl": geocoderTemplate
     };
 
     return directive;
 
-    function linkFunction (scope, element, attributes) {
+    function link (scope, element, attributes) {
       var waitTimeout;
 
       var $el      = element[0];
@@ -68,11 +68,15 @@
       }
 
       function inputBlur (event) {
-        scope.showList = false;
+        $timeout(function () {
+          scope.showList = false;
+        }, 100);
       }
 
       function inputFocus (event) {
-        scope.showList = true;
+        scope.$apply(function () {
+          scope.showList = true;
+        });
       }
 
       function inputChanged (event) {
@@ -129,6 +133,7 @@
       }
 
       function selectItem (index) {
+        scope.index    = index;
         scope.result   = scope.results[index];
         scope.query    = scope.result.formatted_address;
 
