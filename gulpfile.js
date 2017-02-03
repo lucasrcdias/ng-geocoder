@@ -1,7 +1,8 @@
 var gulp            = require("gulp");
 var sass            = require("gulp-sass");
-var gulpif          = require("gulp-if");
+var guppy           = require("git-guppy");
 var watch           = require("gulp-watch");
+var gulpif          = require("gulp-if");
 var concat          = require("gulp-concat");
 var uglify          = require("gulp-uglify");
 var cssNano         = require("gulp-cssnano");
@@ -96,6 +97,7 @@ gulp.task('browser', function () {
   });
 });
 
-gulp.task("dev",     ["jsDev", "styleDev", "watch", "browser"]);
-gulp.task("build",   ["jsDist", "styleDist"]);
-gulp.task("default", ["dev"]);
+gulp.task("dev",        ["jsDev", "styleDev", "watch", "browser"]);
+gulp.task("build",      ["jsDist", "styleDist"]);
+gulp.task("default",    ["dev"]);
+gulp.task("pre-commit", ["build"]);
