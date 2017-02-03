@@ -3,11 +3,8 @@
   "version": "0.0.1",
   "description": "",
   "main": "ng-geocoder.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lucasrcdias/ng-geocoder.git"
-  },
-  "author": "",
+  "repository": "git+https://github.com/lucasrcdias/ng-geocoder.git",
+  "author": "Lucas Ramos <lucasrcdias@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/lucasrcdias/ng-geocoder/issues"
