@@ -133,13 +133,13 @@
       }
 
       function selectItem (index) {
-        scope.index    = index;
-        scope.result   = scope.results[index];
-        scope.query    = scope.result.formatted_address;
+        $timeout(function () {
+          scope.index    = index;
+          scope.result   = scope.results[index];
+          scope.query    = scope.result.formatted_address;
 
-        scope.showList = false;
-
-        scope.$apply();
+          scope.showList = false;
+        }, 0);
       }
 
       function displayList () {
