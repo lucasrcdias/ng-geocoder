@@ -1,5 +1,5 @@
 (function () {
-	if (window.Element && !Element.prototype.closest) {
+  if (window.Element && !Element.prototype.closest) {
     Element.prototype.closest =
     function(s) {
       var matches = (this.document || this.ownerDocument).querySelectorAll(s);
@@ -13,5 +13,5 @@
 
       return el;
     }
-	}
+  }
 })();
