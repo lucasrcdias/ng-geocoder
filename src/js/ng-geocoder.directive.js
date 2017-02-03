@@ -108,9 +108,11 @@
       }
 
       function search () {
-        scope.results     = [];
-        scope.isEmpty     = false;
-        scope.isSearching = true;
+        scope.$apply(function () {
+          scope.results     = [];
+          scope.isEmpty     = false;
+          scope.isSearching = true;
+        });
 
         return ngGeocoderService.geocodeByQuery(scope.query, attributes.region)
           .then(geocodeSuccess);
