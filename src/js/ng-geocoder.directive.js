@@ -39,6 +39,7 @@
       var placeId  = attributes.placeId;
 
       scope.index   = 0;
+      scope.query   = "";
       scope.results = [];
 
       scope.selectItem   = selectItem;
@@ -108,6 +109,7 @@
 
       function search () {
         scope.results     = [];
+        scope.isEmpty     = false;
         scope.isSearching = true;
 
         return ngGeocoderService.geocodeByQuery(scope.query, attributes.region)
@@ -115,10 +117,11 @@
       }
 
       function geocodeSuccess (results) {
-        scope.isSearching = false;
-        scope.results     = results || [];
-        scope.showList    = true;
         scope.index       = 0;
+        scope.isEmpty     = results.length === 0;
+        scope.results     = results;
+        scope.showList    = true;
+        scope.isSearching = false;
       }
 
       function geocodedWithPlaceId (results) {
@@ -143,7 +146,7 @@
       }
 
       function displayList () {
-        return scope.results.length && scope.showList;
+        return scope.query.length >= scope.minLength && scope.showList;
       }
 
       function handleArrowKeys(key) {
