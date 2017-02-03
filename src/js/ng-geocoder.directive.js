@@ -93,12 +93,14 @@
       function inputKeydown (event) {
         if (!event || !event.keyCode) return;
 
+        var escPressed    = event.keyCode === 27;
         var enterPressed  = event.keyCode === 13;
         var arrowsPressed = event.keyCode === 38 || event.keyCode === 40;
 
-        if (enterPressed || arrowsPressed) {
-          if (arrowsPressed) handleArrowKeys(event.keyCode);
+        if (enterPressed || arrowsPressed || escPressed) {
+          if (escPressed)    hideList();
           if (enterPressed)  selectItem(scope.index);
+          if (arrowsPressed) handleArrowKeys(event.keyCode);
 
           event.preventDefault();
           event.stopPropagation();
@@ -137,6 +139,18 @@
         }
       }
 
+      function displayList () {
+        return scope.query.length >= scope.minLength && scope.showList;
+      }
+
+      function hideList () {
+        input.blur();
+
+        scope.$apply(function () {
+          scope.showList = false;
+        });
+      }
+
       function selectItem (index) {
         $timeout(function () {
           scope.index    = index;
@@ -145,10 +159,6 @@
 
           scope.showList = false;
         }, 0);
-      }
-
-      function displayList () {
-        return scope.query.length >= scope.minLength && scope.showList;
       }
 
       function handleArrowKeys(key) {
