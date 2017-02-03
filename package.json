@@ -6,9 +6,17 @@
   "repository": "git+https://github.com/lucasrcdias/ng-geocoder.git",
   "author": "Lucas Ramos <lucasrcdias@gmail.com>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/lucasrcdias/ng-geocoder/issues"
-  },
+  "bugs": "https://github.com/lucasrcdias/ng-geocoder/issues",
+  "keywords": [
+    "JS",
+    "AngularJS",
+    "Maps",
+    "Geocoder"
+  ],
+  "files": [
+    "dist/ng-geocoder.js",
+    "dist/ng-geocoder.css"
+  ],
   "homepage": "https://github.com/lucasrcdias/ng-geocoder#readme",
   "devDependencies": {
     "browser-sync": "^2.15.0",
