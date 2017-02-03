@@ -2,7 +2,8 @@
   "name": "ng-geocoder",
   "description": "Angular Google Maps Geocoder",
   "main": [
-    "dist/ng-geocoder.js"
+    "dist/ng-geocoder.js",
+    "dist/ng-geocoder.css"
   ],
   "authors": [
     "Lucas Ramos <lucasrcdias@gmail.com>"
@@ -20,7 +21,7 @@
     "node_modules",
     "bower_components"
   ],
-  "devDependencies": {
+  "dependencies": {
     "angular": "1.5.5"
   }
 }
