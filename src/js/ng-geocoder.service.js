@@ -15,17 +15,18 @@
     return service;
 
     function handleReply (defer, results, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        return defer.resolve(results);
-      } else if (status === google.maps.GeocoderStatus.ZERO_RESULTS) {
-        return defer.resolve([]);
-      } else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
-        return defer.reject("Over query limit");
-      } else if (status === google.maps.GeocoderStatus.REQUEST_DENIED) {
-        return defer.reject("Request denied");
+      switch (status) {
+        case google.maps.GeocoderStatus.OK:
+          return defer.resolve(results);
+        case google.maps.GeocoderStatus.ZERO_RESULTS:
+          return defer.resolve([]);
+        case google.maps.GeocoderStatus.OVER_QUERY_LIMIT:
+          return defer.reject("Over query limit");
+        case google.maps.GeocoderStatus.REQUEST_DENIED:
+          return defer.reject("Request denied");
+        default:
+          return defer.reject("Unknown error");
       }
-
-      return defer.reject("Unknown error");
     }
 
     function geocodeById (placeId) {
@@ -33,7 +34,12 @@
     }
 
     function geocodeByQuery (query, region) {
-      return geocode({ "address": query, "region": region });
+      var params = {
+        "address": query,
+        "region": region
+      }
+
+      return geocode(params);
     }
 
     function geocode (options) {
