@@ -83,7 +83,7 @@
       function inputChanged (event) {
         var length = scope.query.length;
 
-        if (length < scope.minLength || scope.isSearching) { return; }
+        if (length < scope.minLength) return;
 
         if (waitTimeout) { $timeout.cancel(waitTimeout); }
 
