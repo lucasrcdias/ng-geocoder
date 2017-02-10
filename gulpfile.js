@@ -1,6 +1,6 @@
 var gulp            = require("gulp");
 var sass            = require("gulp-sass");
-var guppy           = require("git-guppy");
+var guppy           = require("git-guppy")(gulp);
 var watch           = require("gulp-watch");
 var gulpif          = require("gulp-if");
 var concat          = require("gulp-concat");
