@@ -46,7 +46,7 @@
       scope.displayList  = displayList;
       scope.inputKeydown = inputKeydown;
 
-      form.addEventListener("keydown", formKeydown);
+      if (form) form.addEventListener("keydown", formKeydown);
 
       input.addEventListener("blur",           inputBlur);
       input.addEventListener("focus",          inputFocus);
