@@ -14,14 +14,15 @@
       "restrict": "AE",
       "scope": {
         "result": "=ngGeocoder",
-        "inputId": "=",
         "wait": "=",
+        "inputId": "=",
+        "placeId": "=",
         "minLength": "=",
+        "maxHeight": "@",
         "inputClass": "@",
         "placeholder": "@",
         "textSearching": "@",
-        "textNoResults": "@",
-        "maxHeight": "@"
+        "textNoResults": "@"
       },
       "link": link,
       "templateUrl": geocoderTemplate
@@ -36,7 +37,6 @@
       var form     = $el.closest("form");
       var input    = $el.querySelector(".ng-geocoder__input");
       var dropdown = $el.querySelector(".ng-geocoder__list");
-      var placeId  = attributes.placeId;
 
       scope.index   = 0;
       scope.query   = "";
@@ -46,6 +46,8 @@
       scope.displayList  = displayList;
       scope.inputKeydown = inputKeydown;
 
+      scope.$watch("placeId", placeIdChanged);
+
       if (form) form.addEventListener("keydown", formKeydown);
 
       input.addEventListener("blur",           inputBlur);
@@ -53,11 +55,6 @@
       input.addEventListener("input",          inputChanged);
       input.addEventListener("keydown",        inputKeydown);
       input.addEventListener("compositionend", inputChanged);
-
-      if (placeId) {
-        ngGeocoderService.geocodeById(placeId)
-          .then(geocodedWithPlaceId);
-      }
 
       function formKeydown (event) {
         var targetIsGeocoderInput = event.target.classList.contains("ng-geocoder__input");
@@ -221,6 +218,13 @@
         var css = getComputedStyle(row);
 
         return row.offsetHeight + parseInt(css.marginTop, 10) + parseInt(css.marginBottom, 10);
+      }
+
+      function placeIdChanged (placeId) {
+        if (placeId) {
+          return ngGeocoderService.geocodeById(placeId)
+            .then(geocodedWithPlaceId);
+        }
       }
     }
 
