@@ -15,7 +15,7 @@
       "scope": {
         "result": "=ngGeocoder",
         "wait": "=",
-        "inputId": "=",
+        "inputId": "@",
         "placeId": "=",
         "minLength": "=",
         "maxHeight": "@",
@@ -47,6 +47,7 @@
       scope.inputKeydown = inputKeydown;
 
       scope.$watch("placeId", placeIdChanged);
+      scope.$on("ng-geocoder:clear", clearGeocoder);
 
       if (form) form.addEventListener("keydown", formKeydown);
 
@@ -224,6 +225,17 @@
         if (placeId) {
           return ngGeocoderService.geocodeById(placeId)
             .then(geocodedWithPlaceId);
+        }
+      }
+
+      function clearGeocoder (event, id) {
+        if (!id || id === scope.inputId) {
+          $timeout(function () {
+            scope.query    = "";
+            scope.result   = {};
+            scope.index    = 0;
+            scope.showList = false;
+          }, 0);
         }
       }
     }
