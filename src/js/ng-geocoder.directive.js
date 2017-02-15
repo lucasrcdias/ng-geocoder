@@ -18,6 +18,7 @@
         "inputId": "@",
         "placeId": "=",
         "minLength": "=",
+        "selectCallback": "=",
         "maxHeight": "@",
         "inputClass": "@",
         "placeholder": "@",
@@ -156,6 +157,10 @@
           scope.query    = scope.result.formatted_address;
 
           scope.showList = false;
+
+          if (scope.selectCallback && typeof scope.selectCallback === "function") {
+            scope.selectCallback();
+          }
         }, 0);
       }
 
