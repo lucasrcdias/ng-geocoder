@@ -159,7 +159,7 @@
           scope.showList = false;
 
           if (scope.selectCallback && typeof scope.selectCallback === "function") {
-            scope.selectCallback();
+            scope.selectCallback(scope.result);
           }
         }, 0);
       }
