@@ -135,6 +135,8 @@
           scope.result   = result;
 
           scope.showList = false;
+
+          runCallback();
         }
       }
 
@@ -151,6 +153,8 @@
       }
 
       function selectItem (index) {
+        if (!scope.results.length) return;
+
         $timeout(function () {
           scope.index    = index;
           scope.result   = scope.results[index];
@@ -158,10 +162,32 @@
 
           scope.showList = false;
 
-          if (scope.selectCallback && typeof scope.selectCallback === "function") {
-            scope.selectCallback(scope.result);
-          }
+          runCallback();
         }, 0);
+      }
+
+      function runCallback () {
+        if (scope.selectCallback && typeof scope.selectCallback === "function") {
+          scope.selectCallback(scope.result);
+        }
+      }
+
+      function placeIdChanged (placeId) {
+        if (placeId) {
+          return ngGeocoderService.geocodeById(placeId)
+            .then(geocodedWithPlaceId);
+        }
+      }
+
+      function clearGeocoder (event, id) {
+        if (!id || id === scope.inputId) {
+          $timeout(function () {
+            scope.query    = "";
+            scope.result   = {};
+            scope.index    = 0;
+            scope.showList = false;
+          }, 0);
+        }
       }
 
       function handleArrowKeys(key) {
@@ -224,24 +250,6 @@
         var css = getComputedStyle(row);
 
         return row.offsetHeight + parseInt(css.marginTop, 10) + parseInt(css.marginBottom, 10);
-      }
-
-      function placeIdChanged (placeId) {
-        if (placeId) {
-          return ngGeocoderService.geocodeById(placeId)
-            .then(geocodedWithPlaceId);
-        }
-      }
-
-      function clearGeocoder (event, id) {
-        if (!id || id === scope.inputId) {
-          $timeout(function () {
-            scope.query    = "";
-            scope.result   = {};
-            scope.index    = 0;
-            scope.showList = false;
-          }, 0);
-        }
       }
     }
 
