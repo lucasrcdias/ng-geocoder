@@ -39,6 +39,11 @@
       var input    = $el.querySelector(".ng-geocoder__input");
       var dropdown = $el.querySelector(".ng-geocoder__list");
 
+      var geocodeOptions = {
+        "region": attributes.region,
+        "language": attributes.language
+      }
+
       scope.index   = 0;
       scope.query   = "";
       scope.results = [];
@@ -115,7 +120,7 @@
           scope.isSearching = true;
         });
 
-        return ngGeocoderService.geocodeByQuery(scope.query, attributes.region)
+        return ngGeocoderService.geocodeByQuery(scope.query, geocodeOptions)
           .then(geocodeSuccess);
       }
 
@@ -174,7 +179,7 @@
 
       function placeIdChanged (placeId) {
         if (placeId) {
-          return ngGeocoderService.geocodeById(placeId)
+          return ngGeocoderService.geocodeById(placeId, geocodeOptions)
             .then(geocodedWithPlaceId);
         }
       }
