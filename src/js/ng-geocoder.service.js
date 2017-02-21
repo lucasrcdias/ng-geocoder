@@ -29,17 +29,12 @@
       }
     }
 
-    function geocodeById (placeId) {
-      return geocode({ "placeId": placeId });
+    function geocodeById (placeId, options) {
+      return geocode(Object.assign({ "placeId": placeId }, options));
     }
 
-    function geocodeByQuery (query, region) {
-      var params = {
-        "address": query,
-        "region": region
-      }
-
-      return geocode(params);
+    function geocodeByQuery (query, options) {
+      return geocode(Object.assign({ "address": query }, options));
     }
 
     function geocode (options) {
