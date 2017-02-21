@@ -30,11 +30,11 @@
     }
 
     function geocodeById (placeId, options) {
-      return geocode(Object.assign({ "placeId": placeId }, options));
+      return geocode(extend({ "placeId": placeId }, options));
     }
 
     function geocodeByQuery (query, options) {
-      return geocode(Object.assign({ "address": query }, options));
+      return geocode(extend({ "address": query }, options));
     }
 
     function geocode (options) {
@@ -45,6 +45,14 @@
       });
 
       return defer.promise;
+    }
+
+    function extend (obj, src) {
+      for (var key in src) {
+        if (src.hasOwnProperty(key)) obj[key] = src[key];
+      }
+
+      return obj;
     }
   }
 })();
