@@ -52,6 +52,7 @@
       scope.index   = 0;
       scope.query   = "";
       scope.results = [];
+      scope.result  = {};
 
       scope.selectItem   = selectItem;
       scope.displayList  = displayList;
