@@ -12,16 +12,20 @@
 
     var directive = {
       "restrict": "AE",
+      "require": "^?form",
       "scope": {
         "result": "=ngGeocoder",
         "wait": "=",
-        "inputId": "@",
         "placeId": "=",
         "minLength": "=",
+        "fieldRequired": "=",
         "selectCallback": "=",
+        "inputId": "@",
+        "inputName": "@",
         "maxHeight": "@",
         "inputClass": "@",
         "placeholder": "@",
+        "requiredClass": "@",
         "textSearching": "@",
         "textNoResults": "@"
       },
@@ -31,7 +35,7 @@
 
     return directive;
 
-    function link (scope, element, attributes) {
+    function link (scope, element, attributes, $form) {
       var waitTimeout;
 
       var $el      = element[0];
@@ -39,6 +43,7 @@
       var input    = $el.querySelector(".ng-geocoder__input");
       var dropdown = $el.querySelector(".ng-geocoder__list");
 
+      var requiredClass  = scope.requiredClass || "ng-geocoder__input--invalid";
       var geocodeOptions = {
         "region": attributes.region,
         "language": attributes.language
@@ -53,9 +58,13 @@
       scope.inputKeydown = inputKeydown;
 
       scope.$watch("placeId", placeIdChanged);
+      scope.$watch("fieldRequired", fieldRequiredChanged);
+
       scope.$on("ng-geocoder:clear", clearGeocoder);
 
       if (form) form.addEventListener("keydown", formKeydown);
+
+      handleRequired(scope.fieldRequired);
 
       input.addEventListener("blur",           inputBlur);
       input.addEventListener("focus",          inputFocus);
@@ -167,6 +176,8 @@
 
           scope.showList = false;
 
+          $form[scope.inputName].$setValidity(requiredClass, true);
+
           runCallback();
         }, 0);
       }
@@ -184,6 +195,20 @@
         }
       }
 
+      function fieldRequiredChanged (newVal, oldVal) {
+        if (newVal !== oldVal) {
+          handleRequired(newVal);
+        }
+      }
+
+      function handleRequired (required) {
+        if (!required) {
+          $form[scope.inputName].$setValidity(requiredClass, true);
+        } else {
+          $form[scope.inputName].$setValidity(requiredClass, !!scope.result.formatted_address);
+        }
+      }
+
       function clearGeocoder (event, id) {
         if (!id || id === scope.inputId) {
           $timeout(function () {
@@ -191,6 +216,8 @@
             scope.result   = {};
             scope.index    = 0;
             scope.showList = false;
+
+            if (scope.fieldRequired) $form[scope.inputName].$setValidity(requiredClass, false);
           }, 0);
         }
       }
