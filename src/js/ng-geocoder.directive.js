@@ -58,6 +58,7 @@
       scope.displayList  = displayList;
       scope.inputKeydown = inputKeydown;
 
+      scope.$watch("query", queryChanged);
       scope.$watch("placeId", placeIdChanged);
       scope.$watch("fieldRequired", fieldRequiredChanged);
 
@@ -186,6 +187,15 @@
       function runCallback () {
         if (scope.selectCallback && typeof scope.selectCallback === "function") {
           scope.selectCallback(scope.result);
+        }
+      }
+
+      function queryChanged (newQuery, oldQuery) {
+        if (newQuery !== oldQuery && ((scope.result.formatted_address && newQuery !== scope.result.formatted_address) || newQuery.length === 0)) {
+          scope.index  = 0;
+          scope.result = {};
+
+          if (scope.fieldRequired) $form[scope.inputName].$setValidity(requiredClass, false);
         }
       }
 
