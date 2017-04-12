@@ -14,12 +14,12 @@
       "restrict": "AE",
       "require": "^?form",
       "scope": {
-        "result": "=ngGeocoder",
         "wait": "=",
         "placeId": "=",
         "minLength": "=",
         "fieldRequired": "=",
         "selectCallback": "=",
+        "result": "=ngGeocoder",
         "inputId": "@",
         "inputName": "@",
         "maxHeight": "@",
@@ -151,6 +151,8 @@
           scope.result   = result;
 
           scope.showList = false;
+
+          $form[scope.inputName].$setValidity(requiredClass, true);
 
           runCallback();
         }
