@@ -27,7 +27,8 @@
         "placeholder": "@",
         "requiredClass": "@",
         "textSearching": "@",
-        "textNoResults": "@"
+        "textNoResults": "@",
+        "inputTabindex": "@"
       },
       "link": link,
       "templateUrl": geocoderTemplate
