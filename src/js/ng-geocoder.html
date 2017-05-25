@@ -1,5 +1,5 @@
 <div class="ng-geocoder">
-  <input name="{{ inputName }}" id="{{ inputId }}" placeholder="{{ placeholder }}" class="ng-geocoder__input" type="text" ng-model="query" ng-class="inputClass" autocomplete="off"/>
+  <input name="{{ inputName }}" id="{{ inputId }}" placeholder="{{ placeholder }}" class="ng-geocoder__input" type="text" ng-model="query" ng-class="inputClass" tabindex="{{ inputTabindex }}" autocomplete="off"/>
 
   <ul class="ng-geocoder__list" ng-show="displayList()" ng-style="{ 'max-height': maxHeight || '250px' }">
     <li class="ng-geocoder__list__item ng-geocoder__list__item--searching" ng-if="isSearching">
